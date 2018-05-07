@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.IDeptStaffDao" >
+  <resultMap id="BaseResultMap" type="com.jk.model.Staff" >
+    <id column="staffid" property="staffid" jdbcType="INTEGER" />
+    <result column="staffname" property="staffname" jdbcType="VARCHAR" />
+    <result column="staffbir" property="staffbir" jdbcType="VARCHAR" />
+    <result column="staffage" property="staffage" jdbcType="INTEGER" />
+    <result column="deptid" property="deptid" jdbcType="INTEGER" />
+    <result column="staffpost" property="staffpost" jdbcType="VARCHAR" />
+    <result column="staffsalary" property="staffsalary" jdbcType="VARCHAR" />
+    <result column="deptname" property="deptname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    staffid,staffname,staffsalary,staffpost,staffbir,staffage,deptid,deptname
+  </sql>
+  
+  <select id="queryDeptStaffCount" resultType="long">
+  	select count(*)
+		from t_dept dept,t_staff tu 
+			where dept.deptid = tu.deptid 
+  	<if test="staff.staffname != null">
+	  	and  staffname like '%${staff.staffname}%'
+	  </if>
+  </select>
+  
+  <select id="selectDeptStaffList" resultType="java.util.Map" parameterType="com.jk.model.Staff">
+		  select tu.staffid,tu.staffname,tu.staffage,tu.staffbir,tu.staffsalary,tu.staffpost,dept.deptname,dept.deptid  
+			from t_dept dept,t_staff tu 
+				where dept.deptid = tu.deptid limit #{start},#{rows}
+  </select>
+  
+  <select id="getDeptName" resultType="com.jk.model.Department">
+  select * from t_dept
+  </select>
+  <select id="tuTree" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  select * from tree_tree where id=#{id}
+  </select>
+  
+  <insert id="addDeptStaff" parameterType="com.jk.model.Staff">
+    insert into t_staff
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="staffid != null" >
+        staffid,
+      </if>
+      <if test="staffname != null" >
+        staffname,
+      </if>
+      <if test="staffbir != null" >
+        staffbir,
+      </if>
+      <if test="staffage != null" >
+        staffage,
+      </if>
+      <if test="deptid != null" >
+        deptid,
+      </if>
+      <if test="staffpost != null" >
+        staffpost,
+      </if>
+      <if test="staffsalary != null" >
+        staffsalary,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="staffid != null" >
+        #{staffid,jdbcType=INTEGER},
+      </if>
+      <if test="staffname != null" >
+        #{staffname,jdbcType=VARCHAR},
+      </if>
+      <if test="staffbir != null" >
+        #{staffbir,jdbcType=VARCHAR},
+      </if>
+      <if test="staffage != null" >
+        #{staffage,jdbcType=INTEGER},
+      </if>
+      <if test="deptid != null" >
+        #{deptid,jdbcType=INTEGER},
+      </if>
+      <if test="staffpost != null" >
+        #{staffpost,jdbcType=VARCHAR},
+      </if>
+      <if test="staffsalary != null" >
+        #{staffsalary,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteDeptStaff" parameterType="java.lang.Integer">
+    delete from t_staff
+    where staffid = #{staffid}
+  </delete>
+  
+  <select id="queryDeptStaffById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+ 	select tu.staffid,tu.staffname,tu.staffage,tu.staffbir,tu.staffsalary,tu.staffpost,dept.deptname,dept.deptid   
+			from t_dept dept,t_staff tu 
+				where dept.deptid = tu.deptid and tu.staffid=#{staffid}
+  </select>
+  
+  <update id="updateDeptStaff" parameterType="com.jk.model.Staff">
+    update t_staff
+    <set > 
+      <if test="staffname != null" >
+        staffname = #{staffname,jdbcType=VARCHAR},
+      </if>
+      <if test="staffbir != null" >
+        staffbir = #{staffbir,jdbcType=VARCHAR},
+      </if>
+      <if test="staffage != null" >
+        staffage = #{staffage,jdbcType=INTEGER},
+      </if>
+      <if test="deptid != null" >
+        deptid = #{deptid,jdbcType=INTEGER},
+      </if>
+      <if test="staffpost != null" >
+        staffpost = #{staffpost,jdbcType=VARCHAR},
+      </if>
+      <if test="staffsalary != null" >
+        staffsalary = #{staffsalary,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where staffid = #{staffid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="queryDeptName" resultType="com.jk.model.Department">
+  
+  select deptid,deptname from t_dept
+  </select>
+</mapper>

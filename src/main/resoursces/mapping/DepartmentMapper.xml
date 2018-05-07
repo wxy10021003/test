@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.DepartmentDao" >
+  <resultMap id="BaseResultMap" type="com.jk.model.Department" >
+    <id column="deptid " property="deptid " jdbcType="INTEGER" />
+    <result column="deptname" property="deptname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    deptid,deptname
+  </sql>
+  
+  <select id="queryDeptCount" resultType="long">
+  	select count(*)
+		from t_dept
+  	<if test="dept.deptname != null">
+	  	and  deptname like '%${dept.deptname}%'
+	  </if>
+  </select>
+  
+  <select id="selectDeptList" resultType="java.util.Map" parameterType="com.jk.model.Department">
+		  select * from t_dept where 1=1
+		  <if test="deptnam != null and deptnam != '' ">
+		and   deptname like  #{deptnam}
+		  </if>
+		limit #{start},#{rows}
+  </select>
+  
+  
+ <select id="getDeptName" resultType="com.jk.model.Department">
+  select * from t_dept
+  </select>
+  
+   <delete id="deleteDept" parameterType="java.lang.Integer">
+    delete from t_dept
+    where deptid = #{deptid}
+  </delete>
+  
+    <insert id="addDept" parameterType="com.jk.model.Department">
+    insert into t_dept
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deptid != null" >
+        deptid,
+      </if>
+      <if test="deptname != null" >
+        deptname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deptid != null" >
+        #{deptid,jdbcType=INTEGER},
+      </if>
+      <if test="deptname != null" >
+        #{deptname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  
+  <update id="updateDept" parameterType="com.jk.model.Department">
+    update t_dept set deptname = #{deptname,jdbcType=VARCHAR} 
+   
+    where deptid = #{deptid,jdbcType=INTEGER}
+  </update>
+   <!-- <select id="tuTree" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  select * from tree_tree where id=#{id}
+  </select>
+  
+  <select id="queryDeptStaffById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+ 	select tu.staffid,tu.staffname,tu.staffage,tu.staffbir,tu.staffsalary,tu.staffpost,dept.deptname,dept.deptid   
+			from t_dept dept,t_staff tu 
+				where dept.deptid = tu.deptid and tu.staffid=#{staffid}
+  </select>
+  
+  
+  
+  <select id="queryDeptName" resultType="com.jk.model.Department" parameterType="Integer">
+  
+  select deptid,deptname from t_dept where deptid=#{deptid,jdbcType=INTEGER}
+  </select> -->
+</mapper>

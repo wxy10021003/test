@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.IStaffDao" >
+  <select id="queryStaffTotal" resultType="long">
+	select count(*) from t_staff t1,t_dept t2 where t1.deptid=t2.deptid
+	and louji = 0
+	<if test="staff != null and staff != ''">
+		and staffname like '%${staff}%'
+	</if>
+</select> 
+<!-- huangfuqiang 黄富强      2018/03/126-->
+<!-- 分页 -->
+<select id="queryStaffPage" resultType="com.jk.model.Staff">
+
+	select t1.*,t2.deptname from  t_staff t1,t_dept t2 
+		
+	where t1.deptid=t2.deptid  and louji = 0
+	<if test="staff != null and staff != ''">
+		and staffname like '%${staff}%'
+	</if>
+	limit #{s},#{rows}
+</select>
+
+<update id="delStaf">
+		update t_staff set louji=1 where staffid = #{staffid}
+</update>
+<update id="delSta">
+		update t_staff set louji=2 where staffid = #{staffid}
+</update>
+
+
+<!-- 新增 -->
+	<insert id="addStaff" parameterType="com.jk.model.Staff"> 
+		insert into t_staff (staffid, staffname, staffbir, 
+      staffage,deptid,staffpost,staffsalary,louji)
+    values (#{staffid,jdbcType=INTEGER}, #{staffname,jdbcType=VARCHAR}, #{staffbir,jdbcType=VARCHAR}, 
+      #{staffage,jdbcType=VARCHAR},#{deptid,jdbcType=INTEGER},#{staffpost,jdbcType=VARCHAR},#{staffsalary,jdbcType=VARCHAR},
+      #{louji,jdbcType=INTEGER}
+      )
+</insert> 
+
+<delete id="delStaffs">
+	delete from t_staff where staffid in(${ids})
+</delete>
+
+<select id="queryStaff" resultType="com.jk.model.Staff">
+
+	select t1.*,t2.deptname from  t_staff t1,t_dept t2 
+		
+	where t1.deptid=t2.deptid 
+</select>
+
+<select id="deptName" resultType="com.jk.model.Staff">
+	select * from t_dept
+</select>
+</mapper>

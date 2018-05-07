@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.UpFileMapper" >
+   
+<!--    王云聪 -->
+   
+    <insert id="xiangceAdd">
+		insert into test (driectoryname,userid,driectorydate,product)
+    		values (#{dr.driectoryname}, #{dr.userid},#{dr.driectorydate},#{dr.product})
+	</insert>
+	<select id="queryXiangce" resultType="com.jk.model.Driectory">
+		  select * from test 
+	</select>
+	<select id="queryPhoto" resultType="com.jk.model.UpFile">
+		select * from t_upload_file where userid = #{userid} and driectoryid =#{driectoryid}
+	</select>
+	<insert id="photoAdd">
+		insert into t_upload_file (file_name,file_path,userid,driectoryid,upload_file_date)
+    		values (#{upFile.file_name}, #{upFile.file_path},#{upFile.userid},#{upFile.driectoryid},#{upFile.upload_file_date})
+	</insert>
+</mapper>

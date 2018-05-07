@@ -1,0 +1,32 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 在mybatis中,namespace用于绑定dao层接口,即面向接口编程,
+	好处就是不用写接口实现类,直接找到绑定的sql执行
+ -->
+<mapper namespace="com.jk.dao.UploadDao">
+	 <insert id="add" parameterType="com.jk.model.Img">
+	 
+	 INSERT INTO `t_img` (`imgname`, `fileid`, `imgbewrite`) 
+	 
+	 VALUES (#{imgname},#{fileid},#{imgbewrite})
+	 
+	 
+	 	
+	</insert>
+	<select id="query" resultType="com.jk.model.Img">
+		select * from  t_img
+	</select>	
+	
+	<delete id="del" parameterType="java.lang.String">
+		delete t_img where imgid=#{imgid}
+	</delete>	
+	
+	<select id="fileList" resultType="com.jk.model.File">
+	
+	select * from t_file
+	</select>
+	<select id="imglist" resultType="com.jk.model.Img">
+	
+	select * from t_img i,t_file f where i.fileid=f.fileid and f.fileid=#{fileid}
+	</select>
+</mapper>
